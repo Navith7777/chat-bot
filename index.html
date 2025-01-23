@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Chatbot</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #000000, #000000);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .chat-container {
+      background: white;
+      width: 90%;
+      max-width: 400px;
+      height: 80%;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      padding: 15px;
+      color: white;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .chat-body {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .chat-message {
+      max-width: 80%;
+      padding: 10px 15px;
+      border-radius: 15px;
+      animation: slideIn 0.4s ease;
+    }
+
+    .user-message {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #42e695, #3bb2b8);
+      color: white;
+    }
+
+    .bot-message {
+      align-self: flex-start;
+      background: #f1f0f0;
+      color: #333;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(10px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .chat-footer {
+      display: flex;
+      padding: 15px;
+      background: #f1f1f1;
+      gap: 10px;
+    }
+
+    .chat-footer input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      outline: none;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .chat-footer input:focus {
+      box-shadow: 0 0 8px rgba(58, 123, 213, 0.7);
+    }
+
+    .chat-footer button {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      border: none;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .chat-footer button:hover {
+      background: linear-gradient(135deg, #2575fc, #6a11cb);
+    }
+
+    /* Scrollbar styles */
+    .chat-body::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .chat-body::-webkit-scrollbar-thumb {
+      background: #ddd;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      Robo ChatBot
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="chat-message bot-message">Hi! How can I assist you today?</div>
+    </div>
+    <div class="chat-footer">
+      <input type="text" id="userInput" placeholder="Type your message...">
+      <button id="sendButton">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const chatBody = document.getElementById('chatBody');
+    const userInput = document.getElementById('userInput');
+    const sendButton = document.getElementById('sendButton');
+
+    const gkQuestions = [
+      { question: "What is the capital of France?", answer: "Paris" },
+      { question: "Who wrote the play 'Romeo and Juliet'?", answer: "William Shakespeare" },
+      { question: "What is the smallest planet in our solar system?", answer: "Mercury" },
+      { question: "Who painted the Mona Lisa?", answer: "Leonardo da Vinci" },
+      { question: "What is the boiling point of water?", answer: "100°C" },
+      { question: "Which country is known as the Land of the Rising Sun?", answer: "Japan" },
+      { question: "What is the largest mammal in the world?", answer: "Blue Whale" },
+      { question: "Who is known as the father of computers?", answer: "Charles Babbage" },
+      { question: "What is the national flower of India?", answer: "Lotus" },
+      { question: "How many continents are there on Earth?", answer: "Seven" },
+      { question: "What is the capital of Australia?", answer: "Canberra" },
+      { question: "Who discovered penicillin?", answer: "Alexander Fleming" },
+      { question: "What is the largest desert in the world?", answer: "Sahara Desert" },
+      { question: "What is the chemical symbol for water?", answer: "H₂O" },
+      { question: "Who was the first President of the United States?", answer: "George Washington" },
+      { question: "What is the hardest natural substance on Earth?", answer: "Diamond" }
+    ];
+
+    sendButton.addEventListener('click', () => {
+      const message = userInput.value.trim();
+      if (message) {
+        addMessage(message, 'user-message');
+        userInput.value = '';
+
+        // Simulate bot response
+        setTimeout(() => {
+          addMessage(generateBotResponse(message), 'bot-message');
+        }, 800);
+      }
+    });
+
+    const addMessage = (text, className) => {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `chat-message ${className}`;
+      messageDiv.textContent = text;
+      chatBody.appendChild(messageDiv);
+      chatBody.scrollTop = chatBody.scrollHeight; // Auto-scroll
+    };
+
+    const generateBotResponse = (message) => {
+      const lowerMessage = message.toLowerCase();
+
+      // Check for GK questions
+      const gkMatch = gkQuestions.find(q => lowerMessage.includes(q.question.toLowerCase()));
+      if (gkMatch) return gkMatch.answer;
+
+      return `You said: "${message}". I am still learning to chat better! 😊`;
+    };
+  </script>
+</body>
+</html>
